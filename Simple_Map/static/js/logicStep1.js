@@ -12,55 +12,37 @@ let satelliteStreets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/sate
     accessToken: API_KEY
 });
 
-// Create a base layer that holds both maps.
+// Create a base layer that holds both maps
 let baseMaps = {
     "Streets": streets,
-    "Satellite Streets": satelliteStreets
+    "Satellite": satelliteStreets
 };
+
 
 // Create the map object with center, zoom level and default layer.
 let map = L.map('mapid', {
-    center: [43.7, -79.3],
-    zoom: 11,
+    center: [39.5, -98.5],
+    zoom: 3,
     layers: [streets]
 })
 
 // Pass our map layers into our layers control and add the layers control to the map.
 L.control.layers(baseMaps).addTo(map);
 
-let torontoHoods = "https://raw.githubusercontent.com/morningsides/Mapping_Earthquakes/Mapping_GeoJSON_Polygons/Simple_Map/torontoNeighborhoods.json"
+// let torontoHoods = "https://raw.githubusercontent.com/morningsides/Mapping_Earthquakes/Mapping_GeoJSON_Polygons/Simple_Map/torontoNeighborhoods.json"
 
-// Create a style for polygons.
-let myStyle = {
-    color: "#1933F0",
-    fill: true,
-    fillColor: "#EDED0D",
-    weight: 1
-}
+// // Create a style for polygons.
+// let myStyle = {
+//     color: "#1933F0",
+//     fill: true,
+//     fillColor: "#EDED0D",
+//     weight: 1
+// }
 
 // Grabbing our GeoJSON data.
-d3.json(torontoHoods).then(function (data) {
+d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson").then(function (data) {
     console.log(data);
     // Creating a GeoJSON layer with the retrieved data.
-    L.geoJson(data, {
-            style: myStyle,
-            onEachFeature: function (feature, layer) {
-                layer.bindPopup("<h3> Neighborhood: " + feature.properties.AREA_NAME + "</h3>")
-            }
-        })
+    L.geoJson(data)
         .addTo(map)
 });
-
-// // Grabbing our GeoJSON data.
-// d3.json(torontoData).then(function (data) {
-//     console.log(data);
-//     // Creating a GeoJSON layer with the retrieved data.
-//     L.geoJson(data, {
-//             style: myStyle,
-//             onEachFeature: function (feature, layer) {
-//                 layer.bindPopup("<h3> Airline: " + feature.properties.airline + "</h3> <hr><h3> Destination: " +
-//                     feature.properties.dst + "</h3 >")
-//             }
-//         })
-//         .addTo(map)
-// });
